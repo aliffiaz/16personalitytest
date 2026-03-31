@@ -142,7 +142,7 @@ export default function Result({ user }) {
     try {
       const token = localStorage.getItem('token');
       const userId = user?._id || user?.id;
-      
+
       // 1. Invoke AI Career Guidance first to ensure data is generated
       // This matches the user's requirement to have detailed info for the PDF
       await fetch(`${API_BASE_URL}/mbti/career-guidance/personalized`, {
@@ -160,9 +160,9 @@ export default function Result({ user }) {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (!res.ok) throw new Error('Failed to generate report');
-      
+
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -172,7 +172,7 @@ export default function Result({ user }) {
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
+
     } catch (err) {
       console.error("Download error:", err);
       alert("Failed to download report. Please try again later.");
@@ -200,7 +200,7 @@ export default function Result({ user }) {
           <button className="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all">
             <Share2 size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
-          <button 
+          <button
             onClick={handleDownloadReport}
             disabled={isDownloading}
             className={`p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all ${isDownloading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -218,13 +218,13 @@ export default function Result({ user }) {
           {typeCategory || 'Personality Profile'}
         </div>
         <div className="relative inline-block">
-          <h1 className="text-6xl sm:text-8xl md:text-[160px] font-display font-black tracking-tighter leading-none bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 via-violet-600 to-indigo-700 select-none">
+          <h1 className="text-6xl sm:text-8xl md:text-[160px] brand-shimmer leading-none select-none">
             {mbtiType}
           </h1>
           <div className="absolute -top-4 -right-8 w-16 h-16 sm:w-24 sm:h-24 bg-indigo-200/20 blur-2xl sm:blur-3xl rounded-full -z-10" />
         </div>
         <div className="space-y-3 sm:space-y-4 px-4 sm:px-0">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl">
             {typeName}
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-slate-500 max-w-3xl mx-auto leading-relaxed font-medium">
@@ -245,7 +245,7 @@ export default function Result({ user }) {
 
           <div className="space-y-10">
             {renderDimension('Mind', 'Energy', 'Introverted', 'Extraverted', 'bg-indigo-600', dimensions?.mind)}
-            {renderDimension('Perspective', 'Focus', 'Intuitive', 'Observant', 'bg-violet-600', dimensions?.energy)}
+            {renderDimension('Perspective', 'Focus', 'Intuitive', 'Observant', 'bg-amber-600', dimensions?.energy)}
             {renderDimension('Nature', 'Decision', 'Thinking', 'Feeling', 'bg-emerald-600', dimensions?.nature)}
             {renderDimension('Tactics', 'Execution', 'Judging', 'Prospecting', 'bg-amber-500', dimensions?.tactics)}
           </div>
@@ -288,13 +288,13 @@ export default function Result({ user }) {
             </ul>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="glass-card p-6 sm:p-8 bg-slate-900 border-slate-900">
+          <motion.div variants={itemVariants} className="glass-card p-6 sm:p-8 bg-slate-900 text-white border-slate-900">
             <div className="flex items-center justify-between mb-4">
-              <Globe className="text-indigo-400 sm:w-6 sm:h-6" size={20} />
+              <Globe className="text-amber-400 sm:w-6 sm:h-6" size={20} />
               <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Global Rank</span>
             </div>
             <p className="text-white font-display font-bold text-base sm:text-lg leading-tight">
-              You share this type with <span className="text-indigo-400">1.5%</span> of the population.
+              You share this type with <span className="text-amber-400">1.5%</span> of the population.
             </p>
           </motion.div>
         </div>
@@ -305,8 +305,8 @@ export default function Result({ user }) {
         <button onClick={() => navigate('/dashboard')} className="btn-secondary w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4">
           Return to Dashboard
         </button>
-        <button 
-          onClick={handleDownloadReport} 
+        <button
+          onClick={handleDownloadReport}
           disabled={isDownloading}
           className="btn-primary w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 flex items-center justify-center gap-2"
         >

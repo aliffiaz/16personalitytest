@@ -59,7 +59,7 @@ export default function History({ user }) {
           >
              ← Return to Dashboard
           </button>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-slate-900 tracking-tight mb-2">Test History</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl mb-2">Test History</h1>
           <p className="text-slate-500 text-base sm:text-lg font-medium">Review your previous MBTI personality assessments.</p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function History({ user }) {
               
               <div className="mb-6">
                 <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-1">Type Result</p>
-                <h2 className="text-3xl sm:text-4xl font-display font-bold text-indigo-600 tracking-tighter mb-1">
+                <h2 className="text-3xl sm:text-4xl brand-shimmer leading-none mb-1">
                   {test.mbtiType}
                 </h2>
                 <div className="flex flex-wrap gap-1.5 text-[10px] font-bold text-slate-500">
@@ -110,7 +110,7 @@ export default function History({ user }) {
               
               <button 
                 onClick={() => handleDetailedView(test)}
-                className="w-full bg-slate-50 text-slate-700 border border-slate-100 py-3 rounded-xl font-bold group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent transition-all shadow-sm"
+                className="w-full bg-slate-50 text-slate-700 border border-slate-100 py-3 rounded-xl font-bold group-hover:bg-indigo-600 group-hover:text-white group-hover:border-transparent transition-all shadow-sm shadow-indigo-600/10"
               >
                 View Full Report
               </button>

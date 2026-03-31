@@ -113,8 +113,8 @@ export default function About16Personalities() {
           ← Back to Dashboard
         </button>
         
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-slate-900 tracking-tight mb-6 sm:mb-8 leading-tight">
-          Understanding the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">16 Architectures</span>
+        <h1 className="heading-hero">
+          Understanding the <span className="brand-shimmer">16 Architectures</span>
         </h1>
         
         <div className="glass-card border-indigo-100/50 bg-white/50 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-12 shadow-sm mb-12 sm:mb-16 relative overflow-hidden backdrop-blur-md">

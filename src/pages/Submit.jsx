@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  CheckCircle2, 
-  ArrowLeft, 
-  Send, 
-  Clock, 
+import {
+  CheckCircle2,
+  ArrowLeft,
+  Send,
+  Clock,
   Timer,
-  ShieldCheck, 
+  ShieldCheck,
   AlertTriangle,
   FileCheck
 } from 'lucide-react';
@@ -17,7 +17,7 @@ export default function Submit() {
   const navigate = useNavigate();
   const location = useLocation();
   const sessionId = location.state?.sessionId;
-  
+
   const [sessionData, setSessionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export default function Submit() {
       navigate('/dashboard');
       return;
     }
-    
+
     const fetchSession = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/mbti/test/${sessionId}`, {
@@ -37,7 +37,7 @@ export default function Submit() {
           }
         });
         const data = await res.json();
-        
+
         if (res.ok && data.success) {
           setSessionData(data.data);
         } else {
@@ -50,7 +50,7 @@ export default function Submit() {
         setLoading(false);
       }
     };
-    
+
     fetchSession();
   }, [sessionId, navigate]);
 
@@ -65,7 +65,7 @@ export default function Submit() {
         }
       });
       const data = await res.json();
-      
+
       if (res.ok && data.success) {
         navigate('/result', { state: { testData: data.data } });
       } else {
@@ -90,13 +90,13 @@ export default function Submit() {
 
   const answeredCount = sessionData?.answeredQuestions?.length || 0;
   const totalCount = sessionData?.totalQuestions || 60;
-  
+
   let startTimeDisplay = 'Unknown';
   let timeTakenDisplay = 'Unknown';
   if (sessionData && sessionData.startTime) {
     const start = new Date(sessionData.startTime);
     startTimeDisplay = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
+
     const diffMs = new Date() - start;
     const diffMins = Math.floor(diffMs / 60000);
     const diffSecs = Math.floor((diffMs % 60000) / 1000);
@@ -104,13 +104,13 @@ export default function Submit() {
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className="max-w-3xl mx-auto w-full space-y-8 sm:space-y-10 py-6 sm:py-10 px-4 sm:px-6 md:px-0"
     >
       <div className="text-center space-y-4 sm:space-y-6">
-        <motion.div 
+        <motion.div
           initial={{ rotate: -20, scale: 0 }}
           animate={{ rotate: 0, scale: 1 }}
           transition={{ type: 'spring', damping: 10 }}
@@ -118,7 +118,7 @@ export default function Submit() {
         >
           <CheckCircle2 size={40} className="sm:w-12 sm:h-12" />
         </motion.div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl">
           {answeredCount === totalCount ? 'Assessment Complete' : 'Incomplete Progress'}
         </h1>
         <p className="text-base sm:text-lg text-slate-500 font-medium max-w-xl mx-auto px-4">
@@ -134,10 +134,10 @@ export default function Submit() {
 
       <div className="glass-card p-6 sm:p-10 space-y-6 sm:space-y-8">
         <div className="flex items-center gap-3 pb-4 sm:pb-6 border-b border-slate-100">
-           <FileCheck className="text-indigo-600 sm:w-6 sm:h-6" size={20} />
-           <h2 className="text-lg sm:text-xl font-display font-bold text-slate-900">Session Blueprint</h2>
+          <FileCheck className="text-indigo-600 sm:w-6 sm:h-6" size={20} />
+          <h2 className="text-lg sm:text-xl font-display font-bold text-slate-900">Session Blueprint</h2>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-10">
           <div className="space-y-1">
             <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -166,7 +166,7 @@ export default function Submit() {
 
       <div className="bg-amber-50/50 border border-amber-100 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex items-start gap-3 sm:gap-4 mx-1 sm:mx-0">
         <div className="p-2 bg-amber-100 text-amber-700 rounded-xl shrink-0">
-           <AlertTriangle size={18} className="sm:w-5 sm:h-5" />
+          <AlertTriangle size={18} className="sm:w-5 sm:h-5" />
         </div>
         <p className="text-amber-900/70 text-xs sm:text-sm font-medium leading-relaxed">
           <span className="font-bold block text-amber-900 mb-1 text-sm sm:text-base">Point of no return</span>
@@ -175,14 +175,14 @@ export default function Submit() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 px-2 sm:px-0 pt-4">
-        <button 
+        <button
           onClick={() => navigate('/questions')}
           className="flex-1 btn-secondary order-2 sm:order-1 py-3.5 sm:py-4 text-base sm:text-lg flex items-center justify-center gap-2"
         >
           <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
           <span>Review Answers</span>
         </button>
-        <button 
+        <button
           onClick={handleSubmit}
           disabled={submitting || answeredCount < totalCount}
           className="flex-[2] btn-primary order-1 sm:order-2 py-3.5 sm:py-4 text-lg sm:text-xl shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-2"

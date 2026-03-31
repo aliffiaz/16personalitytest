@@ -42,7 +42,7 @@ export default function Home({ user, onOpenLoginModal }) {
         {/* Animated Background Elements */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] pointer-events-none -z-10 overflow-hidden">
           <div className="absolute top-[-10%] left-[20%] w-[400px] h-[400px] bg-indigo-200/20 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute top-[10%] right-[20%] w-[400px] h-[400px] bg-violet-200/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[10%] right-[20%] w-[400px] h-[400px] bg-amber-200/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
 
         <motion.div
@@ -59,9 +59,9 @@ export default function Home({ user, onOpenLoginModal }) {
             <span className="text-xs font-bold text-slate-600 uppercase tracking-[0.2em]">The Future of Self-Discovery</span>
           </motion.div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold text-slate-900 tracking-tight mb-6 sm:mb-8 leading-[1.1]">
+          <h1 className="heading-hero mb-6 sm:mb-8">
             Decode Your <br className="hidden sm:block" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">Neural DNA</span>
+            <span className="brand-shimmer">Neural DNA</span>
           </h1>
 
           <p className="text-base sm:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto mb-8 sm:mb-12 px-4">
@@ -74,7 +74,7 @@ export default function Home({ user, onOpenLoginModal }) {
               className="btn-primary py-5 px-12 text-lg shadow-2xl shadow-indigo-600/30 group"
             >
               <div className="flex items-center gap-3">
-                <span>{user ? 'Continue Test' : 'Take Free Test'}</span>
+                <span>{user ? 'Continue Test' : 'Take Test'}</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
@@ -132,7 +132,7 @@ export default function Home({ user, onOpenLoginModal }) {
 
       {/* Temperaments Preview */}
       <section className="max-w-6xl mx-auto px-4 overflow-hidden">
-        <div className="glass-card bg-slate-900 border-white/5 p-8 sm:p-12 md:p-20 relative">
+        <div className="glass-card bg-slate-900 text-white border-white/5 p-8 sm:p-12 md:p-20 relative">
           <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-indigo-500/10 blur-[100px] rounded-full -mr-32 -mt-32 sm:-mr-48 sm:-mt-48" />
           <div className="relative z-10 grid lg:grid-cols-2 gap-10 sm:gap-16 items-center">
             <div className="space-y-6 sm:space-y-8">
@@ -172,7 +172,7 @@ export default function Home({ user, onOpenLoginModal }) {
               </button>
             </div>
             <div className="hidden lg:flex items-center justify-center relative">
-              <div className="w-80 h-80 rounded-[64px] bg-gradient-to-br from-indigo-500 to-violet-600 rotate-12 absolute animate-pulse opacity-20" />
+              <div className="w-80 h-80 rounded-[64px] bg-gradient-to-br from-indigo-500 to-amber-600 rotate-12 absolute animate-pulse opacity-20" />
               <div className="w-80 h-80 rounded-[64px] border-2 border-white/10 flex items-center justify-center relative bg-slate-900/50 backdrop-blur-3xl shadow-2xl">
                 <BrainCircuit size={120} className="text-white opacity-20" />
                 <div className="absolute inset-0 flex items-center justify-center">

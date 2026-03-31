@@ -23,7 +23,7 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
         display: ['Outfit', 'sans-serif'],
       },
       backdropBlur: {
@@ -32,6 +32,9 @@ export default {
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
         'glass-hover': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+      },
+      letterSpacing: {
+        'tightest': '-0.06em',
       }
     },
   },

@@ -110,7 +110,7 @@ export default function Dashboard({ user }) {
       {/* Welcome Header */}
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="px-4 md:px-0">
-          <h1 className="text-3xl sm:text-4xl font-display font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl">
             Welcome back, {user?.name?.split(' ')[0] || 'Explorer'} <span className="inline-block animate-bounce-subtle">✨</span>
           </h1>
           <p className="text-slate-500 mt-2 text-base sm:text-lg font-medium">
@@ -134,7 +134,7 @@ export default function Dashboard({ user }) {
 
       {/* Hero Section */}
       <motion.div variants={itemVariants} className="relative group">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-[2.5rem] blur-2xl opacity-10 group-hover:opacity-15 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-amber-600 rounded-[2.5rem] blur-2xl opacity-10 group-hover:opacity-15 transition-opacity" />
         <div className="glass-card p-6 sm:p-10 relative overflow-hidden flex flex-col lg:flex-row justify-between border-indigo-100/50 mx-4 md:mx-0">
           <div className="z-10 relative flex-1 text-center lg:text-left">
             <div className="flex items-center justify-center lg:justify-start gap-2 mb-4">
@@ -180,7 +180,7 @@ export default function Dashboard({ user }) {
             <div className="relative">
               <div className="absolute inset-0 bg-indigo-500/10 blur-[80px] rounded-full" />
               {latestTest ? (
-                <div className="text-[100px] xl:text-[140px] font-display font-black bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 to-violet-600 opacity-20 select-none">
+                <div className="text-[100px] xl:text-[140px] brand-shimmer opacity-20 select-none">
                   {latestTest.mbtiType}
                 </div>
               ) : (
@@ -229,9 +229,9 @@ export default function Dashboard({ user }) {
             value: quota ? quota.testsRemaining : '...',
             sub: 'Available attempts',
             icon: <Sparkles size={24} />,
-            color: 'text-violet-600',
-            bg: 'bg-violet-50',
-            border: 'border-violet-100',
+            color: 'text-amber-600',
+            bg: 'bg-amber-50',
+            border: 'border-amber-100',
             action: () => navigate('/pricing')
           }
         ].map((stat, i) => (

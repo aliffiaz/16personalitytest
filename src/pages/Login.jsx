@@ -101,7 +101,7 @@ export default function Login({ onLoginSuccess }) {
         <motion.div
           animate={{ scale: [1, 1.3, 1], x: [0, -40, 0], y: [0, -50, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-violet-200/30 blur-[150px] rounded-full"
+          className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-amber-200/30 blur-[150px] rounded-full"
         />
         <div className="absolute inset-0 bg-white/40" />
       </div>
@@ -136,14 +136,14 @@ export default function Login({ onLoginSuccess }) {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-[22px] shadow-lg shadow-indigo-600/30 text-white mb-6"
+              className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-600 to-amber-600 rounded-[22px] shadow-lg shadow-indigo-600/30 text-white mb-6"
             >
               <BrainCircuit size={32} />
             </motion.div>
-            <h1 className="text-3xl sm:text-4xl font-display font-black text-slate-900 tracking-tight mb-2 uppercase">
-              Take  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Test</span>
+            <h1 className="text-3xl sm:text-4xl">
+              Take <span className="brand-shimmer uppercase">Test</span>
             </h1>
-            <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.3em] ml-1">MindMatrix Neural Interface</p>
+            <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] ml-1">Open16 Neural Matrix</p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -207,7 +207,7 @@ export default function Login({ onLoginSuccess }) {
                 {!loading && <ChevronRight size={18} className="sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />}
               </span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute inset-0 bg-gradient-to-r from-amber-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"
               />
             </button>
           </form>

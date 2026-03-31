@@ -12,7 +12,7 @@ const groupIcons = {
 };
 
 const groupColors = {
-  "Analysts": "from-indigo-600 to-violet-600",
+  "Analysts": "from-indigo-600 to-amber-600",
   "Diplomats": "from-emerald-500 to-teal-600",
   "Sentinels": "from-blue-500 to-cyan-600",
   "Explorers": "from-amber-400 to-orange-500"
@@ -46,8 +46,8 @@ export default function TypesOverview({ user, onOpenLoginModal }) {
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-3xl mx-auto"
         >
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-slate-900 tracking-tight mb-4 sm:mb-6 leading-tight">
-            Explore the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">16 Architectures</span>
+          <h1 className="heading-hero mb-4 sm:mb-6">
+            Explore the <span className="brand-shimmer">16 Architectures</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-500 font-medium leading-relaxed">
             Discover the unique strengths, motivations, and life paths of every personality type. Grouped by their core temperaments and cognitive styles.
@@ -86,7 +86,7 @@ export default function TypesOverview({ user, onOpenLoginModal }) {
                   viewport={{ once: true }}
                   transition={{ delay: tIdx * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     to={`/types/${type.id}`}
                     className="group block glass-card p-6 h-full hover:border-indigo-200 transition-all hover:shadow-xl hover:shadow-indigo-500/5 mx-1"
                   >
@@ -96,16 +96,16 @@ export default function TypesOverview({ user, onOpenLoginModal }) {
                       </div>
                       <ArrowRight className="text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-1 transition-all" size={16} />
                     </div>
-                    
+
                     <h3 className="text-lg sm:text-xl font-display font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
                       {type.nickname}
                     </h3>
                     <p className="text-slate-500 text-xs sm:text-sm font-medium leading-relaxed line-clamp-3">
                       {type.overview}
                     </p>
-                    
+
                     <div className="mt-6 pt-4 border-t border-slate-100 flex items-center gap-2">
-                       <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Learn Details</span>
+                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Learn Details</span>
                     </div>
                   </Link>
                 </motion.div>
@@ -122,7 +122,7 @@ export default function TypesOverview({ user, onOpenLoginModal }) {
             <h3 className="text-xl sm:text-2xl font-display font-bold text-slate-900">Which one are you?</h3>
             <p className="text-sm sm:text-base text-slate-500 font-medium px-4 md:px-0">Take the 10-minute assessment to find your place in the matrix.</p>
           </div>
-          <button 
+          <button
             onClick={handleCTAClick}
             className="w-full md:w-auto btn-primary py-4 px-10 whitespace-nowrap shadow-xl shadow-indigo-600/20"
           >

@@ -5,7 +5,7 @@ import {
   BookOpen, History, Target, ShieldCheck,
   ChevronRight, HelpCircle, ArrowRight,
   Brain, Layers, Zap, Search, ChevronDown,
-  Info, Cpu
+  Info, Cpu, Users, Activity, Sparkles
 } from 'lucide-react';
 import { aboutContent, dichotomies, faq } from '../data/personalityData';
 
@@ -76,7 +76,7 @@ export default function About({ user, onOpenLoginModal }) {
       <section className="relative pt-12 flex flex-col items-center text-center">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] pointer-events-none -z-10">
           <div className="absolute top-0 left-[30%] w-[300px] h-[300px] bg-indigo-200/20 blur-[100px] rounded-full" />
-          <div className="absolute top-[10%] right-[30%] w-[300px] h-[300px] bg-violet-200/20 blur-[100px] rounded-full" />
+          <div className="absolute top-[10%] right-[30%] w-[300px] h-[300px] bg-amber-200/20 blur-[100px] rounded-full" />
         </div>
 
         <motion.div
@@ -87,8 +87,8 @@ export default function About({ user, onOpenLoginModal }) {
           <span className="inline-block px-4 py-2 bg-white/50 backdrop-blur-md text-indigo-600 text-[10px] font-black tracking-widest uppercase rounded-full border border-indigo-100/50 mb-8 shadow-sm">
             Knowledge Ecosystem
           </span>
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold text-slate-900 tracking-tight mb-6 sm:mb-8 px-4">
-            The Philosophy of <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">Type</span>
+          <h1 className="heading-hero px-4">
+            The Philosophy of <span className="brand-shimmer">Type</span>
           </h1>
           <p className="text-base sm:text-xl text-slate-500 font-medium leading-relaxed max-w-3xl mx-auto px-6">
             {aboutContent.mission}
@@ -162,7 +162,7 @@ export default function About({ user, onOpenLoginModal }) {
       </section>
 
       {/* Interactive Dichotomy Explorer */}
-      <section className="bg-slate-900 py-32 relative overflow-hidden">
+      <section className="bg-slate-900 text-white py-32 relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[150px] rounded-full -mr-64 -mb-64" />
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -173,22 +173,38 @@ export default function About({ user, onOpenLoginModal }) {
                 <h2 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight leading-tight">The Four <br className="hidden lg:block" />Dimensions</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4 w-full">
-                {dichotomies.map((dim, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveDimIdx(idx)}
-                    className={`w-full text-left p-5 sm:p-6 rounded-2xl transition-all border flex items-center justify-between group ${activeDimIdx === idx
-                      ? 'bg-indigo-600 border-indigo-400 text-white shadow-xl shadow-indigo-600/40'
-                      : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:border-white/20'
-                      }`}
-                  >
-                    <div>
-                      <span className={`text-[9px] font-black uppercase tracking-widest block mb-1 ${activeDimIdx === idx ? 'text-indigo-200' : 'text-slate-500'}`}>Dimension {idx + 1}</span>
-                      <span className="font-bold text-xs sm:text-sm tracking-tight">{dim.title.split(':')[1].trim()}</span>
-                    </div>
-                    <ChevronRight size={18} className={`transition-transform ${activeDimIdx === idx ? 'translate-x-1' : 'opacity-0 group-hover:opacity-100'}`} />
-                  </button>
-                ))}
+                {dichotomies.map((dim, idx) => {
+                  const codes = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']][idx];
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveDimIdx(idx)}
+                      className={`w-full text-left p-5 rounded-2xl transition-all border flex items-center justify-between group relative overflow-hidden ${activeDimIdx === idx
+                        ? 'bg-indigo-600 border-indigo-400 text-white shadow-xl shadow-indigo-600/40'
+                        : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:border-white/20'
+                        }`}
+                    >
+                      <div className="relative z-10">
+                        <span className={`text-[9px] font-black uppercase tracking-widest block mb-1.5 ${activeDimIdx === idx ? 'text-indigo-200' : 'text-slate-500'}`}>Dimension {idx + 1}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm tracking-tight">{dim.title.split(':')[1].trim().split(' (')[0]}</span>
+                          <div className="flex gap-1">
+                            {codes.map(c => (
+                              <span key={c} className={`text-[9px] px-1.5 py-0.5 rounded-md font-black border ${activeDimIdx === idx ? 'bg-white/20 border-white/20 text-white' : 'bg-white/5 border-white/10 text-slate-500'}`}>{c}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRight size={18} className={`relative z-10 transition-transform ${activeDimIdx === idx ? 'translate-x-1' : 'opacity-0 group-hover:opacity-100'}`} />
+                      {activeDimIdx === idx && (
+                        <motion.div
+                          layoutId="active-glow"
+                          className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-transparent pointer-events-none"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -201,44 +217,97 @@ export default function About({ user, onOpenLoginModal }) {
                   exit={{ opacity: 0, scale: 1.02 }}
                   className="glass-card bg-white/5 border-white/10 p-6 sm:p-12 min-h-[450px] sm:min-h-[550px] flex flex-col justify-between"
                 >
-                  <div>
-                    <div className="flex items-center gap-4 sm:gap-6 mb-8 sm:mb-10">
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl sm:rounded-3xl flex items-center justify-center border border-indigo-500/30 shrink-0">
-                        <Brain size={24} className="sm:w-8 sm:h-8" />
+                  <div className="flex flex-col justify-between h-full space-y-8 sm:space-y-12">
+                    <div className="space-y-10">
+                      {/* Dimension Header */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                        <div className="flex items-center gap-5">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-indigo-500/10 text-indigo-400 rounded-2xl sm:rounded-3xl flex items-center justify-center border border-indigo-500/20 shadow-inner">
+                            {(() => {
+                              const Icons = [Users, Target, Zap, Activity];
+                              const Icon = Icons[activeDimIdx];
+                              return <Icon size={28} className="sm:w-8 sm:h-8" />;
+                            })()}
+                          </div>
+                          <div>
+                            <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1 block">Dimension Matrix</span>
+                            <h3 className="text-3xl sm:text-4xl md:text-5xl font-display font-black brand-shimmer tracking-tightest leading-none">
+                              {dichotomies[activeDimIdx].title.split(':')[1].trim().split(' (')[0]}
+                            </h3>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          {[['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']][activeDimIdx].map(c => (
+                            <div key={c} className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white font-black text-lg shadow-sm">
+                              {c}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <h3 className="text-2xl sm:text-4xl font-display font-bold text-white tracking-tight">
-                        {dichotomies[activeDimIdx].title.split(':')[1].trim()}
-                      </h3>
+
+                      {/* Visual Spectrum Bar */}
+                      <div className="space-y-4 pt-4">
+                        <div className="flex justify-between items-center px-2">
+                          <span className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">
+                            {dichotomies[activeDimIdx].title.split(' vs. ')[0].split('(')[0].trim()}
+                          </span>
+                          <span className="text-[10px] font-black text-amber-300 uppercase tracking-widest">
+                            {dichotomies[activeDimIdx].title.split(' vs. ')[1].split('(')[0].trim()}
+                          </span>
+                        </div>
+                        <div className="relative h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent to-indigo-500/40" />
+                          <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-transparent to-amber-500/40" />
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)] border-2 border-indigo-500" />
+                        </div>
+                      </div>
+
+                      {/* Content Grid */}
+                      <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 }}
+                          className="bg-white/5 rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4 group hover:bg-white/[0.08] transition-colors"
+                        >
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg">
+                              <Sparkles size={16} />
+                            </div>
+                            <h4 className="text-lg font-bold text-white tracking-tight">Primary Preference</h4>
+                          </div>
+                          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
+                            {dichotomies[activeDimIdx].content.split(' vs. ')[0].split('\n')[0].split('. ').slice(0, 2).join('. ') + '.'}
+                          </p>
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="bg-white/5 rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4 group hover:bg-white/[0.08] transition-colors"
+                        >
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-amber-500/20 text-amber-400 rounded-lg">
+                              <Target size={16} />
+                            </div>
+                            <h4 className="text-lg font-bold text-white tracking-tight">Counter Preference</h4>
+                          </div>
+                          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
+                            {dichotomies[activeDimIdx].content.split('. ').slice(-3, -1).join('. ') + '.'}
+                          </p>
+                        </motion.div>
+                      </div>
                     </div>
 
-                    <div className="space-y-6 sm:space-y-8">
-                      <p className="text-slate-300 text-base sm:text-xl leading-[1.6] font-medium">
-                        {dichotomies[activeDimIdx].content.split('. ').slice(0, 2).join('. ') + '.'}
-                      </p>
-                      <div className="grid sm:grid-cols-2 gap-8 sm:gap-12 pt-6 sm:pt-8 border-t border-white/5">
-                        <div className="space-y-3 sm:space-y-4">
-                          <h4 className="text-indigo-400 font-black uppercase tracking-widest text-[10px]">Primary Preference</h4>
-                          <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-medium">
-                            {dichotomies[activeDimIdx].content.split('.')[2] + '.'}
-                          </p>
-                        </div>
-                        <div className="space-y-3 sm:space-y-4">
-                          <h4 className="text-indigo-400 font-black uppercase tracking-widest text-[10px]">Counter Preference</h4>
-                          <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-medium">
-                            {dichotomies[activeDimIdx].content.split('.')[4] + '.'}
-                          </p>
-                        </div>
+                    <div className="pt-8 border-t border-white/5 flex flex-wrap gap-4">
+                      <div className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 text-indigo-300 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20 group hover:bg-indigo-500/20 transition-all cursor-default">
+                        <Zap size={14} className="group-hover:scale-125 transition-transform" /> Neural Matrix Peak
+                      </div>
+                      <div className="flex items-center gap-2 px-5 py-2.5 bg-white/5 text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10 group hover:border-white/20 transition-all cursor-default">
+                        <Search size={14} className="group-hover:rotate-12 transition-transform" /> Depth Insight
                       </div>
                     </div>
-                  </div>
-
-                  <div className="pt-12 border-t border-white/5 flex flex-wrap gap-4">
-                    <span className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 text-indigo-300 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
-                      <Zap size={14} /> Cognitive Axis
-                    </span>
-                    <span className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 text-indigo-300 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
-                      <Search size={14} /> Matrix Insight
-                    </span>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -271,17 +340,17 @@ export default function About({ user, onOpenLoginModal }) {
       {/* Optimized Call to Action */}
       <section className="max-w-5xl mx-auto px-4 mb-20 text-center">
         <motion.div
-          className="relative rounded-[40px] overflow-hidden bg-slate-900 p-12 md:p-24 border border-white/5"
+          className="relative rounded-[40px] overflow-hidden bg-slate-900 text-white p-12 md:p-24 border border-white/5"
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.4 }}
         >
           <div className="absolute top-0 left-0 w-80 h-80 bg-indigo-600/10 blur-[120px] rounded-full -ml-40 -mt-40" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-violet-600/10 blur-[120px] rounded-full -mr-40 -mb-40" />
+          <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-600/10 blur-[120px] rounded-full -mr-40 -mb-40" />
 
           <div className="relative z-10 space-y-10 flex flex-col items-center">
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-white leading-[1.1] tracking-tight">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl text-white leading-[1.1]">
               Ready to Discover Your <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">Unique Blueprint?</span>
+              <span className="brand-gradient">Unique Blueprint?</span>
             </h2>
             <div className="pt-4">
               <button
@@ -292,7 +361,7 @@ export default function About({ user, onOpenLoginModal }) {
                   {user ? 'Resume Assessment' : 'Start Assessment'}
                   <ArrowRight size={20} className="sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             </div>
             <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">View Your Detailed report in 10 minutes.</p>

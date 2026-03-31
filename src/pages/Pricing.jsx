@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Check, 
-  Sparkles, 
-  Zap, 
-  ShieldCheck, 
-  Clock, 
+import {
+  Check,
+  Sparkles,
+  Zap,
+  ShieldCheck,
+  Clock,
   ArrowRight,
   Brain,
   CreditCard,
@@ -105,7 +105,7 @@ export default function Pricing({ user }) {
         key: orderData.key,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "MindMatrix Personality",
+        name: "Open16 Personality",
         description: `Purchase ${orderData.plan.name}`,
         order_id: orderData.orderId,
         handler: async function (response) {
@@ -146,7 +146,7 @@ export default function Pricing({ user }) {
           color: "#4f46e5"
         },
         modal: {
-          ondismiss: function() {
+          ondismiss: function () {
             setProcessingPayment(false);
           }
         }
@@ -174,29 +174,29 @@ export default function Pricing({ user }) {
   }
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20"
     >
       <div className="text-center mb-16">
-        <motion.span 
+        <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-indigo-100 text-indigo-700 text-[10px] sm:text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full border border-indigo-200 mb-6 inline-block"
         >
           Premium Access
         </motion.span>
-        <h1 className="text-4xl sm:text-6xl font-display font-black text-slate-900 tracking-tight mb-6">
-          Invest in Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Growth</span>
+        <h1 className="heading-hero">
+          Invest in Your <span className="brand-gradient">Growth</span>
         </h1>
         <p className="text-slate-500 text-lg sm:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
           Unlock high-precision AI personality reports and career blueprints starting from just ₹{plans[0]?.amount || '499'}.
         </p>
 
         {myQuota && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="mt-8 inline-flex items-center gap-3 bg-emerald-50 border border-emerald-100 px-6 py-3 rounded-2xl text-emerald-800 font-bold shadow-sm"
@@ -209,7 +209,7 @@ export default function Pricing({ user }) {
 
       <AnimatePresence>
         {error && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -260,11 +260,10 @@ export default function Pricing({ user }) {
             <button
               onClick={() => handlePurchase(plan)}
               disabled={processingPayment}
-              className={`w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold transition-all ${
-                idx === 1 
-                  ? 'btn-primary shadow-xl shadow-indigo-600/20' 
+              className={`w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold transition-all ${idx === 1
+                  ? 'btn-primary shadow-xl shadow-indigo-600/20'
                   : 'bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {processingPayment ? (
                 <>
@@ -285,7 +284,7 @@ export default function Pricing({ user }) {
       <div className="mt-20 max-w-4xl mx-auto space-y-12">
         <div className="text-center">
           <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-900 mb-4">Why upgrade to Premium?</h2>
-          <div className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full"></div>
+          <div className="w-20 h-1.5 bg-gradient-to-r from-indigo-600 to-amber-600 mx-auto rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

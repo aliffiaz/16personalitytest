@@ -162,7 +162,7 @@ export default function QuickAssessment({ user }) {
             {type === 'career' ? 'Career Assessment Result' : 'Personality Rapid Check'}
           </p>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 mb-2 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl brand-shimmer mb-2">
             {result.recommendedCareer || result.personality}
           </h1>
 
@@ -221,7 +221,7 @@ export default function QuickAssessment({ user }) {
           <span className="text-indigo-600">{10 - currentIndex} Remaining</span>
         </div>
         <div className="w-full bg-slate-100 h-2 sm:h-2.5 rounded-full flex overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full shadow-sm transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+          <div className="h-full bg-gradient-to-r from-indigo-600 to-amber-600 rounded-full shadow-sm transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
         </div>
       </div>
 

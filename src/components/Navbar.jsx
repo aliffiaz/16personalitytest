@@ -17,25 +17,24 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
 
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl">
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="glass-card px-6 py-3 flex items-center justify-between border-white/40 shadow-xl shadow-indigo-500/5"
       >
         <div className="flex items-center gap-8">
-          <NavLink to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20 group-hover:scale-110 transition-transform">
-              <BrainCircuit className="text-white w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 hidden sm:block">
-              MindMatrix
-            </h1>
+          <NavLink to="/" className="flex items-center group">
+            <img
+              src="/Open16 Logo_1.png"
+              alt="Open16 Logo"
+              className="h-10 w-auto group-hover:scale-105 transition-transform duration-200"
+            />
           </NavLink>
 
           <div className="hidden lg:flex items-center gap-1">
             {user && (
-              <NavLink 
-                to="/dashboard" 
+              <NavLink
+                to="/dashboard"
                 className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
               >
                 <div className="flex items-center gap-2">
@@ -44,8 +43,8 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
                 </div>
               </NavLink>
             )}
-            <NavLink 
-              to="/about" 
+            <NavLink
+              to="/about"
               className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
             >
               <div className="flex items-center gap-2">
@@ -53,8 +52,8 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
                 <span>About</span>
               </div>
             </NavLink>
-            <NavLink 
-              to="/types" 
+            <NavLink
+              to="/types"
               className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
             >
               <div className="flex items-center gap-2">
@@ -63,12 +62,12 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
               </div>
             </NavLink>
             {user && (
-              <NavLink 
-                to="/pricing" 
+              <NavLink
+                to="/pricing"
                 className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
               >
-                <div className="flex items-center gap-2 text-indigo-600 font-bold group/upgrade">
-                  <Zap size={18} className="group-hover/upgrade:fill-indigo-600 transition-all" />
+                <div className="flex items-center gap-2 text-amber-500 font-bold group/upgrade">
+                  <Zap size={18} className="group-hover/upgrade:fill-amber-500 transition-all" />
                   <span>Upgrade</span>
                 </div>
               </NavLink>
@@ -88,7 +87,7 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
                   <span className="text-[10px] text-slate-500 font-medium">Student</span>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={onLogout}
                 className="hidden sm:block p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-200"
                 title="Logout"
@@ -97,7 +96,7 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
               </button>
             </>
           ) : (
-            <button 
+            <button
               onClick={onOpenLoginModal}
               className="btn-primary py-2 sm:py-2.5 px-4 sm:px-6 flex items-center gap-2 text-xs sm:text-sm"
             >
@@ -107,7 +106,7 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
           )}
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden p-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-all"
           >
@@ -133,9 +132,8 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
                     key={link.to}
                     to={link.to}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) => 
-                      `flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${
-                        isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50'
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50'
                       }`
                     }
                   >

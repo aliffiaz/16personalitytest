@@ -95,7 +95,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           >
             {/* Decorative Background */}
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none" />
-            <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-violet-500/10 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-amber-500/10 blur-3xl rounded-full pointer-events-none" />
 
             <button
               onClick={onClose}
@@ -135,7 +135,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-100 text-slate-900 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold"
+                      className="w-full bg-slate-50 border border-slate-100 text-slate-900 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all text-sm font-bold"
                       placeholder="name@personal.ity"
                       required
                     />
@@ -152,7 +152,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-100 text-slate-900 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 transition-all text-sm font-bold"
+                      className="w-full bg-slate-50 border border-slate-100 text-slate-900 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all text-sm font-bold"
                       placeholder="••••••••"
                       required
                     />
@@ -191,7 +191,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 </svg>
                 <span className="text-sm">Sign in with Google</span>
               </button>
-              
+
               <div className="text-center">
                 <p className="text-[11px] text-slate-400 font-medium">
                   By signing in, you agree to our <span className="text-indigo-600 cursor-pointer hover:underline">Terms of Service</span> and <span className="text-indigo-600 cursor-pointer hover:underline">Privacy Policy</span>.

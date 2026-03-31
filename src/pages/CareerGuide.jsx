@@ -40,9 +40,9 @@ export default function CareerGuide({ user }) {
   if (loading) {
     return (
       <div className="h-full flex flex-col items-center justify-center pt-20">
-        <div className="w-16 h-16 border-4 border-app-primary border-t-transparent rounded-full animate-spin mb-6"></div>
-        <p className="text-app-muted font-bold text-lg animate-pulse">Groq AI is personalizing your career paths...</p>
-        <p className="text-app-muted opacity-75 text-sm mt-2">This usually takes a few seconds to generate deep insights.</p>
+        <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
+        <p className="text-slate-500 font-bold text-lg animate-pulse">Our AI is personalizing your career paths...</p>
+        <p className="text-slate-400 opacity-75 text-sm mt-2">This usually takes a few seconds to generate deep insights.</p>
       </div>
     );
   }
@@ -68,8 +68,8 @@ export default function CareerGuide({ user }) {
       </div>
 
       <div className="text-center mb-12 sm:mb-16">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 tracking-tight mb-4 leading-tight">
-          Your Personalised <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Paths</span>
+        <h1 className="heading-hero">
+          Your Personalised <span className="brand-shimmer">Paths</span>
         </h1>
         <p className="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed font-medium">
           {personalizedAdvice?.personalizedAdvice || "Here are the top career recommendations curated just for you based on your unique dimensions."}
