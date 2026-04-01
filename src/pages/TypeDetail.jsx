@@ -240,12 +240,14 @@ export default function TypeDetail({ user, onOpenLoginModal }) {
                <h3 className="text-2xl sm:text-3xl font-display font-bold text-slate-900">Is this you?</h3>
                <p className="text-sm sm:text-base text-slate-500 font-medium">Verify your results with our advanced neural matrix assessment.</p>
             </div>
-            <button
-               onClick={handleCTAClick}
-               className="w-full sm:w-auto btn-primary py-4 sm:py-5 px-10 sm:px-12 text-base sm:text-lg shadow-xl shadow-indigo-600/20"
-            >
-               Start Your Assessment
-            </button>
+            <div className="flex justify-center">
+               <button
+                  onClick={handleCTAClick}
+                  className="w-full sm:w-auto btn-primary py-4 sm:py-5 px-10 sm:px-12 text-base sm:text-lg shadow-xl shadow-indigo-600/20"
+               >
+                  Start Your Assessment
+               </button>
+            </div>
          </section>
       </div>
    );
