@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 
 export default function CareerGuide({ user }) {
@@ -7,6 +7,9 @@ export default function CareerGuide({ user }) {
   const [careerData, setCareerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const location = useLocation();
+  const passedResultId = location.state?.resultId;
 
   useEffect(() => {
     const fetchGuidance = async () => {
@@ -18,10 +21,15 @@ export default function CareerGuide({ user }) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
-          body: JSON.stringify({ userId, age: user?.age, country: user?.country })
+          body: JSON.stringify({ 
+            userId, 
+            age: user?.age, 
+            country: user?.country,
+            resultId: passedResultId // Pass the specific result ID
+          })
         });
         const data = await res.json();
-        
+
         if (res.ok && data.success) {
           setCareerData(data.data);
         } else {
@@ -35,7 +43,7 @@ export default function CareerGuide({ user }) {
       }
     };
     fetchGuidance();
-  }, [user]);
+  }, [user, passedResultId]);
 
   if (loading) {
     return (
@@ -97,7 +105,7 @@ export default function CareerGuide({ user }) {
         <ul className="space-y-4 sm:space-y-5">
           {personalizedAdvice?.immediateSteps?.map((step, i) => (
             <li key={i} className="flex items-start gap-4">
-              <span className="bg-indigo-50 text-indigo-600 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border border-indigo-100">{i+1}</span>
+              <span className="bg-indigo-50 text-indigo-600 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border border-indigo-100">{i + 1}</span>
               <p className="text-slate-600 font-semibold leading-relaxed pt-1 text-sm sm:text-base">{step}</p>
             </li>
           ))}
@@ -105,14 +113,14 @@ export default function CareerGuide({ user }) {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-10">
-        <button 
+        <button
           onClick={() => navigate('/result')}
           className="flex-1 btn-secondary py-3.5 sm:py-4 text-sm sm:text-base order-2 sm:order-1 flex items-center justify-center gap-2"
         >
           <span>← Back to Analysis</span>
         </button>
-        <button 
-          onClick={() => navigate('/share-save')}
+        <button
+          onClick={() => navigate('/share-save', { state: { resultId: passedResultId, mbtiType: careerData?.mbtiType } })}
           className="flex-[2] btn-primary py-3.5 sm:py-4 text-base sm:text-lg order-1 sm:order-2 shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-2"
         >
           <span>Share & Save Results →</span>

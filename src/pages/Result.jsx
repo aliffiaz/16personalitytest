@@ -151,7 +151,7 @@ export default function Result({ user }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ userId, resultId: resultData._id })
       });
 
       // 2. Trigger the PDF download
@@ -264,7 +264,7 @@ export default function Result({ user }) {
               Based on your <span className="text-indigo-600 font-bold">{mbtiType}</span> profile, you excel in environments that value strategic planning and empathetic leadership.
             </p>
             <button
-              onClick={() => navigate('/career-guide')}
+              onClick={() => navigate('/career-guide', { state: { resultId: resultData?._id } })}
               className="w-full btn-primary py-3.5"
             >
               Explore Careers

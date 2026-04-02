@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 
 export default function ShareSave({ user }) {
@@ -12,8 +12,18 @@ export default function ShareSave({ user }) {
   const [downloading, setDownloading] = useState(false);
   const [dlError, setDlError] = useState('');
 
-  // We need resultId to generate the report. We can fetch it via /latest first.
+  const location = useLocation();
+  const passedResultId = location.state?.resultId;
+  const passedMbtiType = location.state?.mbtiType;
+
+  // Use the passed resultId if available, otherwise fetch the latest
   useEffect(() => {
+    if (passedResultId) {
+      setResultId(passedResultId);
+      if (passedMbtiType) setMbtiType(passedMbtiType);
+      return;
+    }
+
     const fetchLatest = async () => {
       try {
         const userId = user?._id || user?.id || 'demo-user-id';
@@ -30,7 +40,7 @@ export default function ShareSave({ user }) {
       }
     };
     fetchLatest();
-  }, [user]);
+  }, [user, passedResultId]);
 
   const handleDownload = async () => {
     if (!resultId) return;
