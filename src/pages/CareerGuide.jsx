@@ -35,6 +35,8 @@ export default function CareerGuide({ user }) {
         } else {
           setError(data.message || 'Failed to fetch the career guidance.');
         }
+
+        
       } catch (err) {
         console.error("Fetch career error: ", err);
         setError("Network error fetching career guidance.");
