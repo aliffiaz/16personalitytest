@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function QuickAssessment({ user }) {
   const navigate = useNavigate();
@@ -134,11 +135,10 @@ export default function QuickAssessment({ user }) {
 
   if (loading) {
     return (
-      <div className="h-full flex flex-col items-center justify-center pt-10 sm:pt-20 px-6 text-center">
-        <div className="w-14 h-14 sm:w-16 sm:h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
-        <p className="text-slate-900 font-display font-bold text-lg sm:text-xl animate-pulse leading-tight">{loadingMsg}</p>
-        <p className="text-slate-400 text-xs sm:text-sm mt-3 font-medium">This usually takes a few seconds for our AI to craft deep insights.</p>
-      </div>
+      <PageLoader 
+        title={loadingMsg} 
+        subtitle="This usually takes a few seconds for our AI to craft deep insights." 
+      />
     );
   }
 

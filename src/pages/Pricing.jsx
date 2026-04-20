@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -10,9 +10,12 @@ import {
   ArrowRight,
   Brain,
   CreditCard,
-  AlertCircle
+  AlertCircle,
+  Ticket,
+  Tag
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -36,11 +39,33 @@ export default function Pricing({ user }) {
   const [error, setError] = useState('');
   const [processingPayment, setProcessingPayment] = useState(false);
   const [myQuota, setMyQuota] = useState(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupons, setAppliedCoupons] = useState({}); // { planId: couponData }
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState({}); // { planId: message }
+  const [activeCouponInput, setActiveCouponInput] = useState(null); // planId that has input open
+  const plansFetched = useRef(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
-    fetchPlans();
+    if (loading) {
+      const timer = setTimeout(() => setShowLoader(true), 200);
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoader(false);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (!plansFetched.current) {
+      fetchPlans();
+      plansFetched.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
     fetchMyQuota();
-  }, [user]);
+  }, [user?._id]);
 
   const fetchPlans = async () => {
     try {
@@ -74,6 +99,52 @@ export default function Pricing({ user }) {
     }
   };
 
+  const handleApplyCoupon = async (planId) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!couponCode.trim()) return;
+
+    setIsValidatingCoupon(true);
+    setCouponError(prev => ({ ...prev, [planId]: '' }));
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/personality-sub/validate-coupon`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ code: couponCode, planId })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setAppliedCoupons(prev => ({ ...prev, [planId]: data.data }));
+        setCouponCode('');
+        setActiveCouponInput(null);
+      } else {
+        setCouponError(prev => ({ ...prev, [planId]: data.message || 'Invalid coupon code.' }));
+      }
+    } catch (err) {
+      console.error("Coupon validation error:", err);
+      setCouponError(prev => ({ ...prev, [planId]: 'Failed to validate coupon.' }));
+    } finally {
+      setIsValidatingCoupon(false);
+    }
+  };
+
+  const removeCoupon = (planId) => {
+    setAppliedCoupons(prev => {
+      const newCoupons = { ...prev };
+      delete newCoupons[planId];
+      return newCoupons;
+    });
+  };
+
   const handlePurchase = async (plan) => {
     if (!user) {
       navigate('/login');
@@ -91,7 +162,10 @@ export default function Pricing({ user }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ planId: plan._id })
+        body: JSON.stringify({ 
+          planId: plan._id,
+          couponCode: appliedCoupons[plan._id]?.code || null 
+        })
       });
 
       const orderData = await res.json();
@@ -100,7 +174,16 @@ export default function Pricing({ user }) {
         throw new Error(orderData.message || 'Failed to create payment order');
       }
 
-      // 2. Open Razorpay Checkout
+      // 2. Handle Free Orders (100% Discount)
+      if (orderData.isFree) {
+        // Success notification or immediate refresh
+        await fetchMyQuota();
+        navigate('/test-intro', { state: { paymentSuccess: true } });
+        setProcessingPayment(false);
+        return;
+      }
+
+      // 3. Open Razorpay Checkout (Paid Orders)
       const options = {
         key: orderData.key,
         amount: orderData.amount,
@@ -162,24 +245,27 @@ export default function Pricing({ user }) {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <div className="relative">
-          <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
-          <Brain className="absolute inset-0 m-auto text-indigo-600 animate-pulse" size={24} />
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20"
-    >
+    <>
+      <AnimatePresence>
+        {showLoader && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px]"
+          >
+            <PageLoader title="Accessing Premium Matrix" subtitle="Retrieving the latest subscription plans..." />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 transition-opacity duration-300 ${loading ? 'opacity-0' : 'opacity-100'}`}
+      >
       <div className="text-center mb-16">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -226,16 +312,8 @@ export default function Pricing({ user }) {
           <motion.div
             key={plan._id}
             variants={cardVariants}
-            className={`glass-card relative overflow-hidden flex flex-col p-8 sm:p-10 border-indigo-100/50 hover:border-indigo-500/50 transition-all duration-500 group ${idx === 1 ? 'ring-2 ring-indigo-600 ring-offset-4 ring-offset-slate-50' : ''}`}
+            className="glass-card relative overflow-hidden flex flex-col p-8 sm:p-10 border-indigo-100/50 hover:border-indigo-500/50 transition-all duration-500 group"
           >
-            {idx === 1 && (
-              <div className="absolute top-0 right-0">
-                <div className="bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-6 py-2 rotate-45 translate-x-[25px] translate-y-[10px] shadow-lg">
-                  Best Value
-                </div>
-              </div>
-            )}
-
             <div className="mb-8">
               <h3 className="text-2xl font-display font-black text-slate-900 group-hover:text-indigo-600 transition-colors">{plan.name}</h3>
               <p className="text-slate-500 text-sm font-medium mt-2">{plan.description}</p>
@@ -257,13 +335,76 @@ export default function Pricing({ user }) {
               ))}
             </div>
 
+            {/* Coupon Section */}
+            <div className="mb-6">
+              <AnimatePresence mode="wait">
+                {appliedCoupons[plan._id] ? (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Tag size={16} className="text-indigo-600" />
+                      <span className="text-sm font-bold text-indigo-700">
+                        {appliedCoupons[plan._id].code} Applied (-₹{appliedCoupons[plan._id].discountAmount})
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => removeCoupon(plan._id)}
+                      className="text-indigo-500 hover:text-indigo-700 text-sm font-bold underline"
+                    >
+                      Remove
+                    </button>
+                  </motion.div>
+                ) : activeCouponInput === plan._id ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100"
+                  >
+                    <div className="flex gap-2">
+                      <input 
+                        type="text"
+                        placeholder="ENTER COUPON CODE"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all uppercase tracking-wider"
+                        onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon(plan._id)}
+                      />
+                      <button
+                        onClick={() => handleApplyCoupon(plan._id)}
+                        disabled={isValidatingCoupon}
+                        className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 disabled:opacity-50 shadow-md shadow-indigo-600/10 transition-all active:scale-[0.98]"
+                      >
+                        {isValidatingCoupon ? '...' : 'Apply'}
+                      </button>
+                    </div>
+                    {couponError[plan._id] && (
+                      <p className="text-xs text-rose-500 font-bold ml-1 flex items-center gap-1">
+                        <AlertCircle size={12} />
+                        {couponError[plan._id]}
+                      </p>
+                    )}
+                  </motion.div>
+                ) : (
+                  <button 
+                    onClick={() => setActiveCouponInput(plan._id)}
+                    className="w-full flex items-center justify-center gap-2 bg-slate-50 border border-dashed border-slate-300 text-slate-500 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50/50 transition-all py-3 px-4 rounded-xl group"
+                  >
+                    <Ticket size={18} className="group-hover:rotate-12 transition-transform" />
+                    <span className="text-sm font-bold uppercase tracking-wide">Have a coupon? Apply it here</span>
+                  </button>
+                )}
+              </AnimatePresence>
+            </div>
+
             <button
               onClick={() => handlePurchase(plan)}
               disabled={processingPayment}
-              className={`w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold transition-all ${idx === 1
-                  ? 'btn-primary shadow-xl shadow-indigo-600/20'
-                  : 'bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              className="w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold transition-all btn-primary shadow-xl shadow-indigo-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {processingPayment ? (
                 <>
@@ -273,7 +414,12 @@ export default function Pricing({ user }) {
               ) : (
                 <>
                   <CreditCard size={18} />
-                  <span>Get Started Now</span>
+                  <span>
+                    {appliedCoupons[plan._id] 
+                      ? `Pay ₹${appliedCoupons[plan._id].finalAmount}`
+                      : 'Get Started Now'
+                    }
+                  </span>
                 </>
               )}
             </button>
@@ -316,5 +462,6 @@ export default function Pricing({ user }) {
         </div>
       </div>
     </motion.div>
+    </>
   );
 }

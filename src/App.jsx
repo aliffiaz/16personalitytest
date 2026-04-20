@@ -16,6 +16,8 @@ import TypesOverview from './pages/TypesOverview';
 import TypeDetail from './pages/TypeDetail';
 import Home from './pages/Home';
 import Pricing from './pages/Pricing';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsConditions from './pages/TermsConditions';
 import LoginModal from './components/LoginModal';
 
 function App() {
@@ -71,6 +73,8 @@ function App() {
           <Route path="/about" element={<About user={user} onOpenLoginModal={toggleLoginModal} />} />
           <Route path="/types" element={<TypesOverview user={user} onOpenLoginModal={toggleLoginModal} />} />
           <Route path="/types/:typeId" element={<TypeDetail user={user} onOpenLoginModal={toggleLoginModal} />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
           
           {/* Protected Area */}
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Navigate to="/login" replace />} />

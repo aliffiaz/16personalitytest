@@ -10,6 +10,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function Questions({ user }) {
   const navigate = useNavigate();
@@ -22,8 +23,12 @@ export default function Questions({ user }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answersMap, setAnswersMap] = useState({});
 
+  const initialized = React.useRef(false);
+
   useEffect(() => {
     const startTest = async () => {
+      if (initialized.current) return;
+      initialized.current = true;
       try {
         const userId = user?._id || user?.id || 'demo-user-id';
         const res = await fetch(`${API_BASE_URL}/mbti/test/start`, {
@@ -118,18 +123,7 @@ export default function Questions({ user }) {
   };
 
   if (loading) {
-    return (
-      <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600"
-        >
-          <HelpCircle size={32} />
-        </motion.div>
-        <p className="text-slate-500 font-display font-semibold text-xl">Preparing your workspace...</p>
-      </div>
-    );
+    return <PageLoader title="Initializing Persona Lab" subtitle="Setting up your cognitive workspace..." />;
   }
 
   if (error && questions.length === 0) {

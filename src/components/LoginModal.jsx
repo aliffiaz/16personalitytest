@@ -1,35 +1,39 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, LogIn, Mail, Lock, ChevronRight, AlertTriangle } from 'lucide-react';
+import { X, Sparkles, LogIn, Mail, Lock, User as UserIcon, ChevronRight, AlertTriangle } from 'lucide-react';
 import { auth, provider } from '../firebase';
 import { signInWithPopup, getAdditionalUserInfo } from 'firebase/auth';
 import { API_BASE_URL } from '../config';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
+  const [isLogin, setIsLogin] = useState(true);
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Reset state when closing / toggling
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError('');
+    setFullName('');
+    setEmail('');
+    setPassword('');
+  };
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     setError('');
     try {
       const result = await signInWithPopup(auth, provider);
-      const additionalInfo = getAdditionalUserInfo(result);
-
-      if (additionalInfo?.isNewUser) {
-        await result.user.delete();
-        setError("Account not found. Please register via our official mobile app first.");
-        setLoading(false);
-        return;
-      }
-
+      // We no longer block new users, we'll let it register them via googleLogin endpoint
       const user = result.user;
       const response = await fetch(`${API_BASE_URL}/student/googleLogin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email, fullName: user.displayName || 'User' }),
+        body: JSON.stringify({ email: user.email, fullName: user.displayName || 'User', profilePicture: user.photoURL }),
       });
 
       const data = await response.json();
@@ -48,16 +52,19 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     }
   };
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/student/StudentLogin`, {
+      const endpoint = isLogin ? '/student/StudentLogin' : '/student/signup';
+      const payload = isLogin ? { email, password } : { email, password, FullName: fullName };
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -66,10 +73,10 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         if (onLoginSuccess) onLoginSuccess(data);
         onClose();
       } else {
-        setError(data.message || 'Invalid credentials. Please try again.');
+        setError(data.message || (isLogin ? 'Invalid credentials. Please try again.' : 'Signup failed. Try again.'));
       }
     } catch (err) {
-      console.error("Login request failed:", err);
+      console.error("Auth request failed:", err);
       setError('Network error. Please check your internet connection.');
     } finally {
       setLoading(false);
@@ -109,8 +116,12 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-indigo-600/20 text-white mb-4">
                   <Sparkles size={24} />
                 </div>
-                <h3 className="text-2xl font-display font-bold text-slate-900">Welcome Back</h3>
-                <p className="text-slate-500 text-sm font-medium">Sign in to access your assessment report</p>
+                <h3 className="text-2xl font-display font-bold text-slate-900">
+                  {isLogin ? 'Welcome Back' : 'Create Account'}
+                </h3>
+                <p className="text-slate-500 text-sm font-medium">
+                  {isLogin ? 'Sign in to access your assessment report' : 'Sign up to take your personalized assessment'}
+                </p>
               </div>
 
               {error && (
@@ -124,7 +135,31 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                 </motion.div>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleAuth} className="space-y-4">
+                {!isLogin && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-1.5"
+                  >
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-600 transition-colors">
+                        <UserIcon size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-100 text-slate-900 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all text-sm font-bold"
+                        placeholder="John Doe"
+                        required={!isLogin}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email ID</label>
                   <div className="relative group">
@@ -165,13 +200,26 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   className="w-full btn-primary py-3.5 shadow-lg shadow-indigo-600/10 group overflow-hidden relative active:scale-[0.98] transition-all"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2 text-sm font-bold">
-                    {loading ? 'Signing In...' : 'Sign In'}
+                    {loading ? (isLogin ? 'Signing In...' : 'Creating Account...') : (isLogin ? 'Sign In' : 'Sign Up')}
                     {!loading && <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />}
                   </span>
                 </button>
               </form>
 
-              <div className="flex items-center my-6">
+              <div className="text-center mt-2">
+                <p className="text-[12px] text-slate-500 font-medium">
+                  {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+                  <button 
+                    type="button" 
+                    onClick={toggleMode}
+                    className="text-indigo-600 cursor-pointer hover:underline font-bold"
+                  >
+                    {isLogin ? "Sign Up" : "Sign In"}
+                  </button>
+                </p>
+              </div>
+
+              {/* <div className="flex items-center my-4">
                 <div className="flex-grow bg-slate-100 h-px"></div>
                 <span className="px-4 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">OR</span>
                 <div className="flex-grow bg-slate-100 h-px"></div>
@@ -189,12 +237,12 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
-                <span className="text-sm">Sign in with Google</span>
-              </button>
+                <span className="text-sm">Continue with Google</span>
+              </button> */}
 
               <div className="text-center">
                 <p className="text-[11px] text-slate-400 font-medium">
-                  By signing in, you agree to our <span className="text-indigo-600 cursor-pointer hover:underline">Terms of Service</span> and <span className="text-indigo-600 cursor-pointer hover:underline">Privacy Policy</span>.
+                  By continuing, you agree to our <Link to="/terms-conditions" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Terms of Service</Link> and <Link to="/privacy-policy" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Privacy Policy</Link>.
                 </p>
               </div>
             </div>

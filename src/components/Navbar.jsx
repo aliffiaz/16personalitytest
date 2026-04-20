@@ -83,8 +83,8 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
                   {user.initials || user.name?.charAt(0) || 'U'}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold text-slate-800 leading-none">{user.name}</span>
-                  <span className="text-[10px] text-slate-500 font-medium">Student</span>
+                  <span className="text-xs font-bold text-slate-800 leading-none">{user.name.toUpperCase()}</span>
+                  {/* <span className="text-[10px] text-slate-500 font-medium">Student</span> */}
                 </div>
               </div>
               <button

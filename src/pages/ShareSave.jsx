@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
+import BrainLoader from '../components/BrainLoader';
 
 export default function ShareSave({ user }) {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function ShareSave({ user }) {
   const [sendMsg, setSendMsg] = useState('');
   const [downloading, setDownloading] = useState(false);
   const [dlError, setDlError] = useState('');
+  const [showSlowMessage, setShowSlowMessage] = useState(false);
 
   const location = useLocation();
   const passedResultId = location.state?.resultId;
@@ -46,6 +48,8 @@ export default function ShareSave({ user }) {
     if (!resultId) return;
     setDownloading(true);
     setDlError('');
+    setShowSlowMessage(false);
+    const slowTimer = setTimeout(() => setShowSlowMessage(true), 10000);
     try {
       const res = await fetch(`${API_BASE_URL}/mbti/report/${resultId}/download`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -64,6 +68,8 @@ export default function ShareSave({ user }) {
     } catch (err) {
       setDlError("Failed to trigger download.");
     } finally {
+      clearTimeout(slowTimer);
+      setShowSlowMessage(false);
       setDownloading(false);
     }
   };
@@ -132,13 +138,33 @@ export default function ShareSave({ user }) {
           <button
             onClick={handleDownload}
             disabled={downloading || !resultId}
-            className="btn-primary py-4 sm:py-5 px-8 sm:px-10 rounded-xl w-full max-w-sm text-lg sm:text-xl shadow-xl shadow-indigo-600/20 active:scale-[0.98] transition-all"
+            className="btn-primary py-4 sm:py-5 px-8 sm:px-10 rounded-xl w-full max-w-sm text-lg sm:text-xl shadow-xl shadow-indigo-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
           >
-            {downloading ? "Generating PDF..." : "📥 Download PDF Report"}
+            {downloading ? (
+              <>
+                <BrainLoader size={28} />
+                <span>Generating...</span>
+              </>
+            ) : (
+              <>📥 Download PDF Report</>
+            )}
           </button>
           
           <p className="text-slate-400 text-xs mt-6 font-medium">Also sent to {user?.email || 'your email'}</p>
         </div>
+
+        {showSlowMessage && (
+          <div className="mt-8 flex justify-center">
+            <div className="bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-4 max-w-sm flex items-start gap-3 shadow-inner">
+              <div className="shrink-0">
+                <BrainLoader size={48} />
+              </div>
+              <p className="text-indigo-700 text-xs font-medium leading-relaxed text-left">
+                Preparing your full report. It may take some time to generate as AI analyzes your profile, please wait...
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="glass-card border-slate-100 rounded-[2.5rem] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between shadow-xl gap-4 sm:gap-0 bg-white/60">

@@ -15,11 +15,13 @@ import {
   CreditCard
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function TestIntro({ user }) {
   const navigate = useNavigate();
   const [quota, setQuota] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [starting, setStarting] = React.useState(false);
 
   React.useEffect(() => {
     const fetchQuota = async () => {
@@ -41,6 +43,10 @@ export default function TestIntro({ user }) {
     };
     fetchQuota();
   }, [user]);
+
+  if (loading) {
+    return <PageLoader title="Authenticating Session" subtitle="Verifying your assessment quota..." />;
+  }
 
   return (
     <motion.div
@@ -128,14 +134,16 @@ export default function TestIntro({ user }) {
       </div>
 
       <div className="px-4 w-full flex flex-col items-center gap-6">
-        {loading ? (
-          <div className="w-10 h-10 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
-        ) : quota?.testsRemaining > 0 ? (
+        {quota?.testsRemaining > 0 ? (
           <button
-            onClick={() => navigate('/questions')}
-            className="btn-primary w-full max-w-sm py-4 text-lg sm:text-xl shadow-2xl"
+            onClick={() => {
+              setStarting(true);
+              navigate('/questions');
+            }}
+            disabled={starting}
+            className={`btn-primary w-full max-w-sm py-4 text-lg sm:text-xl shadow-2xl ${starting ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            Begin Assessment
+            {starting ? 'Initializing...' : 'Begin Assessment'}
           </button>
         ) : (
           <div className="flex flex-col items-center gap-6 w-full">

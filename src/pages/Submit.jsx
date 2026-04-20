@@ -12,6 +12,7 @@ import {
   FileCheck
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function Submit() {
   const navigate = useNavigate();
@@ -80,12 +81,7 @@ export default function Submit() {
   };
 
   if (loading) {
-    return (
-      <div className="h-[60vh] flex flex-col items-center justify-center gap-6">
-        <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-slate-500 font-display font-semibold text-xl">Compiling your responses...</p>
-      </div>
-    );
+    return <PageLoader title="Compiling Responses" subtitle="Our AI is assembling your cognitive blueprint..." />;
   }
 
   const answeredCount = sessionData?.answeredQuestions?.length || 0;

@@ -13,6 +13,7 @@ import {
   Compass
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,6 +38,7 @@ export default function Result({ user }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showSlowMessage, setShowSlowMessage] = useState(false);
 
   useEffect(() => {
     if (historicalResult) {
@@ -70,15 +72,7 @@ export default function Result({ user }) {
   }, [user]);
 
   if (loading) {
-    return (
-      <div className="h-[60vh] flex flex-col items-center justify-center gap-6">
-        <div className="relative">
-          <div className="w-20 h-20 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin" />
-          <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-indigo-600" size={24} />
-        </div>
-        <p className="text-slate-500 font-display font-semibold text-xl animate-pulse">Mapping your neural matrix...</p>
-      </div>
-    );
+    return <PageLoader title="Analyzing Your Profile" subtitle="Mapping your neural matrix, please hold..." />;
   }
 
   if (error || !resultData) {
@@ -139,6 +133,8 @@ export default function Result({ user }) {
   const handleDownloadReport = async () => {
     if (isDownloading) return;
     setIsDownloading(true);
+    setShowSlowMessage(false);
+    const slowTimer = setTimeout(() => setShowSlowMessage(true), 10000);
     try {
       const token = localStorage.getItem('token');
       const userId = user?._id || user?.id;
@@ -177,6 +173,8 @@ export default function Result({ user }) {
       console.error("Download error:", err);
       alert("Failed to download report. Please try again later.");
     } finally {
+      clearTimeout(slowTimer);
+      setShowSlowMessage(false);
       setIsDownloading(false);
     }
   };
@@ -197,13 +195,16 @@ export default function Result({ user }) {
           <span>Dashboard</span>
         </button>
         <div className="flex gap-2 sm:gap-3">
-          <button className="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all">
+          <button 
+            onClick={() => navigate('/share-save', { state: { resultId: resultData?._id } })}
+            className="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all hover:border-indigo-200 hover:text-indigo-600"
+          >
             <Share2 size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
           <button
             onClick={handleDownloadReport}
             disabled={isDownloading}
-            className={`p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all ${isDownloading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all ${isDownloading ? 'opacity-50 cursor-not-allowed' : 'hover:border-indigo-200 hover:text-indigo-600'}`}
             title="Download Detailed Report"
           >
             <Download size={16} className={`sm:w-[18px] sm:h-[18px] ${isDownloading ? 'animate-bounce' : ''}`} />
@@ -323,6 +324,21 @@ export default function Result({ user }) {
           )}
         </button>
       </motion.div>
+
+      {showSlowMessage && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-center"
+        >
+          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 max-w-lg flex items-start gap-3 shadow-sm">
+            <Info className="text-indigo-500 shrink-0 mt-0.5" size={18} />
+            <p className="text-indigo-800 text-sm font-medium leading-relaxed">
+              Preparing your full report. It may take some time to generate as AI analyzes your profile, please wait...
+            </p>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

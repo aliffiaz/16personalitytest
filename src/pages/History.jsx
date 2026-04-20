@@ -1,13 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function History({ user }) {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setShowLoader(true), 200);
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoader(false);
+    }
+  }, [loading]);
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -30,7 +41,7 @@ export default function History({ user }) {
       }
     };
     fetchHistory();
-  }, [user]);
+  }, [user?._id]);
 
   const handleDetailedView = (testData) => {
     navigate('/result', { state: { testData } });
@@ -41,16 +52,22 @@ export default function History({ user }) {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-app-primary border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="p-4 sm:p-6 md:p-10 max-w-6xl mx-auto w-full space-y-8">
+    <>
+      <AnimatePresence>
+        {showLoader && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px]"
+          >
+            <PageLoader title="Retrieving History" subtitle="Fetching your previous personality assessments..." />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className={`p-4 sm:p-6 md:p-10 max-w-6xl mx-auto w-full space-y-8 transition-opacity duration-300 ${loading ? 'opacity-0' : 'opacity-100'}`}>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-2 sm:mb-10">
         <div>
           <button 
@@ -119,5 +136,6 @@ export default function History({ user }) {
         </div>
       )}
     </div>
+    </>
   );
 }

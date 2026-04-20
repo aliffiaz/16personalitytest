@@ -212,7 +212,7 @@ export default function Login({ onLoginSuccess }) {
             </button>
           </form>
 
-          <div className="flex items-center my-10">
+          {/* <div className="flex items-center my-10">
             <div className="flex-grow bg-slate-200/50 h-px"></div>
             <span className="px-5 text-slate-400 text-[9px] font-black uppercase tracking-[0.4em]">OR</span>
             <div className="flex-grow bg-slate-200/50 h-px"></div>
@@ -231,7 +231,7 @@ export default function Login({ onLoginSuccess }) {
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
             <span className="tracking-tight">Connect with Google</span>
-          </button>
+          </button> */}
 
           {/* <div className="mt-12 text-center pointer-events-none">
             <div className="flex justify-center items-center gap-3 text-slate-300 text-[9px] font-black uppercase tracking-[0.3em]">

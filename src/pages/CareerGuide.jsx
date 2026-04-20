@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
+import PageLoader from '../components/PageLoader';
 
 export default function CareerGuide({ user }) {
   const navigate = useNavigate();
@@ -48,13 +49,7 @@ export default function CareerGuide({ user }) {
   }, [user, passedResultId]);
 
   if (loading) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center pt-20">
-        <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
-        <p className="text-slate-500 font-bold text-lg animate-pulse">Our AI is personalizing your career paths...</p>
-        <p className="text-slate-400 opacity-75 text-sm mt-2">This usually takes a few seconds to generate deep insights.</p>
-      </div>
-    );
+    return <PageLoader title="Consulting AI Experts" subtitle="Analyzing career paths for your unique profile..." />;
   }
 
   if (error || !careerData) {
