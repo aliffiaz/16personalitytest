@@ -1,5 +1,6 @@
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
 const navItems = [
   { id: 1, label: 'Login', path: '/login' },
@@ -13,6 +14,8 @@ const navItems = [
 ];
 
 export default function Sidebar({ user }) {
+  const pathname = usePathname();
+
   return (
     <aside className="w-64 bg-app-sidebar flex flex-col h-full border-r border-[#1C1F26] flex-shrink-0">
       <div className="p-8">
@@ -26,30 +29,24 @@ export default function Sidebar({ user }) {
       <div className="flex-1 overflow-y-auto px-4 mt-4">
         <h3 className="text-[#404653] text-[11px] font-semibold tracking-widest mb-4 px-4">USER FLOW</h3>
         <nav className="space-y-1 relative">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.id}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center px-4 py-3 rounded-xl transition-colors ${
-                  isActive 
-                    ? 'bg-[#1C1F2E] text-white' 
+          {navItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <Link
+                key={item.id} href={item.path}
+                className={`flex items-center px-4 py-3 rounded-xl transition-colors ${isActive
+                    ? 'bg-[#1C1F2E] text-white'
                     : 'text-app-muted hover:bg-[#1C1F2E]/30 hover:text-white'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <span 
-                    className={`w-2 h-2 rounded-full mr-3 ${
-                      isActive ? 'bg-app-green shadow-[0_0_8px_rgba(0,183,127,0.8)]' : 'bg-[#404653]'
+                  }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full mr-3 ${isActive ? 'bg-app-green shadow-[0_0_8px_rgba(0,183,127,0.8)]' : 'bg-[#404653]'
                     }`}
-                  ></span>
-                  <span className="text-sm font-medium">{item.id} · {item.label}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
+                ></span>
+                <span className="text-sm font-medium">{item.id} · {item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
       </div>
 

@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ShieldCheck, FileText } from 'lucide-react';
 
 export default function Footer() {
@@ -15,11 +15,11 @@ export default function Footer() {
       </div>
       
       <div className="flex items-center gap-6 text-sm">
-        <Link to="/privacy-policy" className="flex items-center gap-1.5 hover:text-indigo-600 font-bold transition-colors">
+        <Link href="/privacy-policy" className="flex items-center gap-1.5 hover:text-indigo-600 font-bold transition-colors">
           <ShieldCheck size={16} />
           <span>Privacy Policy</span>
         </Link>
-        <Link to="/terms-conditions" className="flex items-center gap-1.5 hover:text-indigo-600 font-bold transition-colors">
+        <Link href="/terms-conditions" className="flex items-center gap-1.5 hover:text-indigo-600 font-bold transition-colors">
           <FileText size={16} />
           <span>Terms & Conditions</span>
         </Link>

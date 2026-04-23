@@ -1,12 +1,17 @@
+"use client";
+
+
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import LoadingBar from './LoadingBar';
+import { useAuth } from './AuthProvider';
 
-export default function Layout({ user, onLogout, onOpenLoginModal }) {
-  const location = useLocation();
+export default function Layout({ children }) {
+  const pathname = usePathname();
+  const { user, handleLogout, toggleLoginModal } = useAuth();
 
   return (
     <div className="flex flex-col min-h-screen relative overflow-x-hidden">
@@ -16,18 +21,18 @@ export default function Layout({ user, onLogout, onOpenLoginModal }) {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-amber-200/20 blur-[120px] rounded-full" />
       </div>
 
-      <Navbar user={user} onLogout={onLogout} onOpenLoginModal={onOpenLoginModal} />
+      <Navbar user={user} onLogout={handleLogout} onOpenLoginModal={toggleLoginModal} />
       
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-28 pb-12">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
-            key={location.pathname}
+            key={pathname}
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
           >
-            <Outlet />
+            {children}
           </motion.div>
         </AnimatePresence>
       </main>

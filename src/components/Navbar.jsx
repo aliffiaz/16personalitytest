@@ -1,10 +1,15 @@
+"use client";
+
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
+
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, BrainCircuit, LogOut, Info, Users, LogIn, Menu, X, Home, Zap } from 'lucide-react';
 
 export default function Navbar({ user, onLogout, onOpenLoginModal }) {
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const navLinks = [
@@ -23,54 +28,50 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
         className="glass-card px-6 py-3 flex items-center justify-between border-white/40 shadow-xl shadow-indigo-500/5"
       >
         <div className="flex items-center gap-8">
-          <NavLink to="/" className="flex items-center group">
+          <Link href="/" className="flex items-center group">
             <img
               src="/Open16 Logo_1.png"
               alt="Open16 Logo"
               className="h-10 w-auto group-hover:scale-105 transition-transform duration-200"
             />
-          </NavLink>
+          </Link>
 
           <div className="hidden lg:flex items-center gap-1">
             {user && (
-              <NavLink
-                to="/dashboard"
-                className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
+              <Link href="/dashboard"
+                className={pathname === '/dashboard' ? 'nav-link-active' : 'nav-link'}
               >
                 <div className="flex items-center gap-2">
                   <LayoutDashboard size={18} />
                   <span>Dashboard</span>
                 </div>
-              </NavLink>
+              </Link>
             )}
-            <NavLink
-              to="/about"
-              className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
+            <Link href="/about"
+              className={pathname === '/about' ? 'nav-link-active' : 'nav-link'}
             >
               <div className="flex items-center gap-2">
                 <Info size={18} />
                 <span>About</span>
               </div>
-            </NavLink>
-            <NavLink
-              to="/types"
-              className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
+            </Link>
+            <Link href="/types"
+              className={pathname === '/types' ? 'nav-link-active' : 'nav-link'}
             >
               <div className="flex items-center gap-2">
                 <Users size={18} />
                 <span>Types</span>
               </div>
-            </NavLink>
+            </Link>
             {user && (
-              <NavLink
-                to="/pricing"
-                className={({ isActive }) => isActive ? 'nav-link-active' : 'nav-link'}
+              <Link href="/pricing"
+                className={pathname === '/pricing' ? 'nav-link-active' : 'nav-link'}
               >
                 <div className="flex items-center gap-2 text-amber-500 font-bold group/upgrade">
                   <Zap size={18} className="group-hover/upgrade:fill-amber-500 transition-all" />
                   <span>Upgrade</span>
                 </div>
-              </NavLink>
+              </Link>
             )}
           </div>
         </div>
@@ -127,19 +128,17 @@ export default function Navbar({ user, onLogout, onOpenLoginModal }) {
             <div className="p-4 space-y-2">
               {navLinks.map((link) => {
                 if (link.protected && !user) return null;
+                const isActive = pathname === link.to;
                 return (
-                  <NavLink
-                    key={link.to}
-                    to={link.to}
+                  <Link
+                    key={link.to} href={link.to}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50'
-                      }`
-                    }
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'text-slate-600 hover:bg-slate-50'
+                      }`}
                   >
                     <link.icon size={20} />
                     <span>{link.label}</span>
-                  </NavLink>
+                  </Link>
                 );
               })}
               {user && (

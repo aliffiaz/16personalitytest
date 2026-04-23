@@ -1,10 +1,13 @@
+"use client";
+
+import Link from 'next/link';
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, LogIn, Mail, Lock, User as UserIcon, ChevronRight, AlertTriangle } from 'lucide-react';
-import { auth, provider } from '../firebase';
+import { auth, provider } from '@/firebase';
 import { signInWithPopup, getAdditionalUserInfo } from 'firebase/auth';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL } from '@/config';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,6 +36,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       const response = await fetch(`${API_BASE_URL}/student/googleLogin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email: user.email, fullName: user.displayName || 'User', profilePicture: user.photoURL }),
       });
 
@@ -61,9 +65,11 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       const endpoint = isLogin ? '/student/StudentLogin' : '/student/signup';
       const payload = isLogin ? { email, password } : { email, password, FullName: fullName };
 
+      console.log(`Attempting auth: ${API_BASE_URL}${endpoint}`);
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
 
@@ -242,7 +248,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
 
               <div className="text-center">
                 <p className="text-[11px] text-slate-400 font-medium">
-                  By continuing, you agree to our <Link to="/terms-conditions" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Terms of Service</Link> and <Link to="/privacy-policy" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Privacy Policy</Link>.
+                  By continuing, you agree to our <Link href="/terms-conditions" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Terms of Service</Link> and <Link href="/privacy-policy" onClick={onClose} className="text-indigo-600 cursor-pointer hover:underline">Privacy Policy</Link>.
                 </p>
               </div>
             </div>
