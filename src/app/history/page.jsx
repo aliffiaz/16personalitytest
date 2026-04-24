@@ -1,18 +1,20 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '@/config';
 import PageLoader from '@/components/PageLoader';
 
-export default function History({ user }) {
+export default function History() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showLoader, setShowLoader] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (loading) {

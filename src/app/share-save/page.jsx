@@ -1,13 +1,15 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL } from '@/config';
 import BrainLoader from '@/components/BrainLoader';
 
-export default function ShareSave({ user }) {
+export default function ShareSave() {
   const router = useRouter();
+  const { user } = useAuth();
   const [resultId, setResultId] = useState(null);
   const [mbtiType, setMbtiType] = useState('MBTI');
   const [parentEmail, setParentEmail] = useState('');

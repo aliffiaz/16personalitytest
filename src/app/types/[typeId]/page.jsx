@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useParams, notFound } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import Link from 'next/link';
 
 import React from 'react';
@@ -21,8 +22,9 @@ const SectionTitle = ({ icon: Icon, title, color }) => (
    </div>
 );
 
-export default function TypeDetail({ user, onOpenLoginModal }) {
+export default function TypeDetail() {
    const router = useRouter();
+   const { user, toggleLoginModal } = useAuth();
    const { typeId } = useParams();
    const type = personalityTypes.find(t => t.id === typeId?.toLowerCase());
 
@@ -32,7 +34,7 @@ export default function TypeDetail({ user, onOpenLoginModal }) {
       if (user) {
          router.push('/test-intro');
       } else {
-         onOpenLoginModal();
+         toggleLoginModal();
       }
    };
 

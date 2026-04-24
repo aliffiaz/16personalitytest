@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import Link from 'next/link';
 
 import React from 'react';
@@ -29,15 +30,16 @@ const groupBg = {
   "Explorers": "bg-amber-50 text-amber-600"
 };
 
-export default function TypesOverview({ user, onOpenLoginModal }) {
+export default function TypesOverview() {
   const router = useRouter();
+  const { user, toggleLoginModal } = useAuth();
   const groups = Object.keys(groupMap);
 
   const handleCTAClick = () => {
     if (user) {
       router.push('/test-intro');
     } else {
-      onOpenLoginModal();
+      toggleLoginModal();
     }
   };
 

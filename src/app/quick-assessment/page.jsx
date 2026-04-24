@@ -1,13 +1,14 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/config';
 import PageLoader from '@/components/PageLoader';
 
-export default function QuickAssessment({ user }) {
+export default function QuickAssessment() {
   const router = useRouter();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const type = searchParams.get('type');
   const age = searchParams.get('age');

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -20,8 +21,9 @@ import {
 import { API_BASE_URL } from '@/config';
 import PageLoader from '@/components/PageLoader';
 
-export default function TestIntro({ user }) {
+export default function TestIntro() {
   const router = useRouter();
+  const { user } = useAuth();
   const [quota, setQuota] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [starting, setStarting] = React.useState(false);

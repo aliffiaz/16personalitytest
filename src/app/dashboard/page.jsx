@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,8 +33,9 @@ const itemVariants = {
   visible: { y: 0, opacity: 1 }
 };
 
-export default function Dashboard({ user }) {
+export default function Dashboard() {
   const router = useRouter();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const location = { state: {} }; // Mock for state
 

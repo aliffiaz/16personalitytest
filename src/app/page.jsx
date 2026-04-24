@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -27,14 +28,15 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => (
   </motion.div>
 );
 
-export default function Home({ user, onOpenLoginModal }) {
+export default function Home() {
   const router = useRouter();
+  const { user, toggleLoginModal } = useAuth();
 
   const handleCTAClick = () => {
     if (user) {
       router.push('/test-intro');
     } else {
-      onOpenLoginModal();
+      toggleLoginModal();
     }
   };
 

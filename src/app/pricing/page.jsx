@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,8 +36,9 @@ const cardVariants = {
   visible: { y: 0, opacity: 1 }
 };
 
-export default function Pricing({ user }) {
+export default function Pricing() {
   const router = useRouter();
+  const { user } = useAuth();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

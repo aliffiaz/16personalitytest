@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -33,8 +34,9 @@ const itemVariants = {
   visible: { y: 0, opacity: 1 }
 };
 
-export default function Result({ user }) {
+export default function Result() {
   const router = useRouter();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const historicalResult = typeof window !== 'undefined' ? JSON.parse(sessionStorage.getItem('next_state_testData') || 'null') : null;
   const [resultData, setResultData] = useState(null);

@@ -1,13 +1,15 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL } from '@/config';
 import PageLoader from '@/components/PageLoader';
 
-export default function CareerGuide({ user }) {
+export default function CareerGuide() {
   const router = useRouter();
+  const { user } = useAuth();
   const [careerData, setCareerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

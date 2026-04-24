@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,8 +16,9 @@ import {
 import { API_BASE_URL } from '@/config';
 import PageLoader from '@/components/PageLoader';
 
-export default function Questions({ user }) {
+export default function Questions() {
   const router = useRouter();
+  const { user } = useAuth();
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sessionId, setSessionId] = useState(null);

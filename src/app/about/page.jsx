@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -53,8 +54,9 @@ const AccordionItem = ({ question, answer, isOpen, onClick }) => (
   </div>
 );
 
-export default function About({ user, onOpenLoginModal }) {
+export default function About() {
   const router = useRouter();
+  const { user, toggleLoginModal } = useAuth();
   const [activeTab, setActiveTab] = useState('history');
   const [activeDimIdx, setActiveDimIdx] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
@@ -63,7 +65,7 @@ export default function About({ user, onOpenLoginModal }) {
     if (user) {
       router.push('/test-intro');
     } else {
-      onOpenLoginModal();
+      toggleLoginModal();
     }
   };
 
