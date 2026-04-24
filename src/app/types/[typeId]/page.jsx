@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 
 import React from 'react';
@@ -26,7 +26,7 @@ export default function TypeDetail({ user, onOpenLoginModal }) {
    const { typeId } = useParams();
    const type = personalityTypes.find(t => t.id === typeId?.toLowerCase());
 
-   if (!type) return <Navigate to="/types" replace />;
+   if (!type) notFound();
 
    const handleCTAClick = () => {
       if (user) {
