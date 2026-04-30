@@ -9,6 +9,12 @@ import Footer from './Footer';
 import LoadingBar from './LoadingBar';
 import { useAuth } from './AuthProvider';
 
+
+
+
+
+
+//hasdcahjcjajavcjdac
 export default function Layout({ children }) {
   const pathname = usePathname();
   const { user, handleLogout, toggleLoginModal } = useAuth();
